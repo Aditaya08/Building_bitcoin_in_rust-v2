@@ -55,7 +55,10 @@ impl BlockHeader {
 
 impl Block {
     pub fn new(header: BlockHeader, transactions: Vec<Transaction>) -> Self {
-        Self { header, transactions }
+        Self {
+            header,
+            transactions,
+        }
     }
 
     pub fn hash(&self) -> Hash {

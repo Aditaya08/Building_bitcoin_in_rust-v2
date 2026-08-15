@@ -66,7 +66,9 @@ impl NodeState {
             DiscoverNodes => Ok(Some(NodeList(self.known_nodes()))),
             AskDifference(height) => {
                 let chain = self.blockchain.read().await;
-                Ok(Some(Difference(chain.block_height() as i32 - height as i32)))
+                Ok(Some(Difference(
+                    chain.block_height() as i32 - height as i32,
+                )))
             }
             FetchUTXOs(key) => {
                 let chain = self.blockchain.read().await;
@@ -90,8 +92,14 @@ impl NodeState {
             }
             ValidateTemplate(block_template) => {
                 let chain = self.blockchain.read().await;
-                let current_tip = chain.blocks().last().map(|block| block.hash()).unwrap_or(Hash::zero());
-                Ok(Some(TemplateValidity(block_template.header.prev_block_hash == current_tip)))
+                let current_tip = chain
+                    .blocks()
+                    .last()
+                    .map(|block| block.hash())
+                    .unwrap_or(Hash::zero());
+                Ok(Some(TemplateValidity(
+                    block_template.header.prev_block_hash == current_tip,
+                )))
             }
             SubmitTemplate(block) => {
                 let mut chain = self.blockchain.write().await;

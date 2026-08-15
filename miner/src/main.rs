@@ -98,7 +98,9 @@ impl Miner {
                 self.mining.store(true, Ordering::Relaxed);
                 Ok(())
             }
-            other => Err(anyhow!("unexpected message while fetching template: {other:?}")),
+            other => Err(anyhow!(
+                "unexpected message while fetching template: {other:?}"
+            )),
         }
     }
 
@@ -116,13 +118,17 @@ impl Miner {
                 self.mining.store(false, Ordering::Relaxed);
                 Ok(())
             }
-            other => Err(anyhow!("unexpected message while validating template: {other:?}")),
+            other => Err(anyhow!(
+                "unexpected message while validating template: {other:?}"
+            )),
         }
     }
 
     async fn submit_block(&self, block: Block) -> Result<()> {
         let mut stream = self.stream.lock().await;
-        Message::SubmitTemplate(block).send_async(&mut *stream).await?;
+        Message::SubmitTemplate(block)
+            .send_async(&mut *stream)
+            .await?;
         self.mining.store(false, Ordering::Relaxed);
         Ok(())
     }

@@ -54,7 +54,9 @@ impl Message {
         stream: &mut (impl AsyncWrite + Unpin),
     ) -> Result<(), ciborium::ser::Error<IoError>> {
         let bytes = self.encode()?;
-        stream.write_all(&(bytes.len() as u64).to_be_bytes()).await?;
+        stream
+            .write_all(&(bytes.len() as u64).to_be_bytes())
+            .await?;
         stream.write_all(&bytes).await?;
         Ok(())
     }

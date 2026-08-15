@@ -164,7 +164,12 @@ impl Core {
     }
 
     pub async fn get_balance(&self) -> u64 {
-        self.utxos.read().await.values().map(|output| output.value).sum()
+        self.utxos
+            .read()
+            .await
+            .values()
+            .map(|output| output.value)
+            .sum()
     }
 
     pub fn calculate_fee(&self, amount: u64) -> u64 {

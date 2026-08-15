@@ -2,9 +2,7 @@ use crate::sha256::Hash;
 use crate::types::{Block, Transaction};
 use serde::{Deserialize, Serialize};
 use std::fs::File;
-use std::io::{
-    Error as IoError, ErrorKind as IoErrorKind, Read, Result as IoResult, Write,
-};
+use std::io::{Error as IoError, ErrorKind as IoErrorKind, Read, Result as IoResult, Write};
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq, Eq)]
 pub struct MerkleRoot(pub Hash);

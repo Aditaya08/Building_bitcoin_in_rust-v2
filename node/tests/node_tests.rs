@@ -7,7 +7,10 @@ use chrono::Utc;
 use node::NodeState;
 
 fn mined_block(prev: Hash, key: &PrivateKey, value: u64) -> Block {
-    let transactions = vec![Transaction::coinbase(TransactionOutput::new(value, key.public_key()))];
+    let transactions = vec![Transaction::coinbase(TransactionOutput::new(
+        value,
+        key.public_key(),
+    ))];
     let mut block = Block::new(
         BlockHeader::new(
             Utc::now(),

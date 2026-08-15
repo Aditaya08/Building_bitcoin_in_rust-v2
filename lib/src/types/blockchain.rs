@@ -10,9 +10,7 @@ use crate::{
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
-use std::io::{
-    Error as IoError, ErrorKind as IoErrorKind, Read, Result as IoResult, Write,
-};
+use std::io::{Error as IoError, ErrorKind as IoErrorKind, Read, Result as IoResult, Write};
 use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -67,13 +65,19 @@ impl Blockchain {
 
     pub fn calculate_block_reward(&self) -> u64 {
         let halvings = self.block_height() / HALVING_INTERVAL;
-        initial_reward_sats().checked_shr(halvings as u32).unwrap_or(0)
+        initial_reward_sats()
+            .checked_shr(halvings as u32)
+            .unwrap_or(0)
     }
 
     pub fn add_block(&mut self, block: Block) -> Result<()> {
         block.validate_merkle_root()?;
         block.validate_proof_of_work()?;
-        let expected_prev = self.blocks.last().map(Block::hash).unwrap_or_else(Hash::zero);
+        let expected_prev = self
+            .blocks
+            .last()
+            .map(Block::hash)
+            .unwrap_or_else(Hash::zero);
         if block.header.prev_block_hash != expected_prev {
             return Err(BtcError::InvalidPreviousHash);
         }
@@ -103,8 +107,9 @@ impl Blockchain {
 
     pub fn cleanup_mempool(&mut self) {
         let now = Utc::now();
-        self.mempool
-            .retain(|_, entry| (now - entry.received_at).num_seconds() <= MAX_MEMPOOL_TRANSACTION_AGE);
+        self.mempool.retain(|_, entry| {
+            (now - entry.received_at).num_seconds() <= MAX_MEMPOOL_TRANSACTION_AGE
+        });
     }
 
     pub fn rebuild_utxos(&mut self) {
@@ -116,7 +121,9 @@ impl Blockchain {
     }
 
     pub fn try_adjust_target(&mut self) {
-        if self.blocks.len() < DIFFICULTY_UPDATE_INTERVAL as usize || self.blocks.len() % DIFFICULTY_UPDATE_INTERVAL as usize != 0 {
+        if self.blocks.len() < DIFFICULTY_UPDATE_INTERVAL as usize
+            || self.blocks.len() % DIFFICULTY_UPDATE_INTERVAL as usize != 0
+        {
             return;
         }
         self.target = min_target();
@@ -129,17 +136,23 @@ impl Blockchain {
             .take(BLOCK_TRANSACTION_CAP)
             .map(|entry| entry.transaction.clone())
             .collect();
-        transactions.insert(0, Transaction::coinbase(TransactionOutput {
-            value: 0,
-            unique_id: Uuid::new_v4(),
-            pubkey,
-        }));
+        transactions.insert(
+            0,
+            Transaction::coinbase(TransactionOutput {
+                value: 0,
+                unique_id: Uuid::new_v4(),
+                pubkey,
+            }),
+        );
 
         let mut block = Block::new(
             BlockHeader::new(
                 Utc::now(),
                 0,
-                self.blocks.last().map(Block::hash).unwrap_or_else(Hash::zero),
+                self.blocks
+                    .last()
+                    .map(Block::hash)
+                    .unwrap_or_else(Hash::zero),
                 MerkleRoot::calculate(&transactions),
                 self.target,
             ),

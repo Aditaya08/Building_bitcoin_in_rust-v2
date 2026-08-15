@@ -2,15 +2,11 @@ use crate::error::{BtcError, Result};
 use crate::sha256::Hash;
 use crate::util::Saveable;
 use k256::ecdsa::signature::{Signer, Verifier};
-use k256::ecdsa::{
-    Signature as KSignature, SigningKey, VerifyingKey,
-};
+use k256::ecdsa::{Signature as KSignature, SigningKey, VerifyingKey};
 use rand_core::OsRng;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::fmt;
-use std::io::{
-    Error as IoError, ErrorKind as IoErrorKind, Read, Result as IoResult, Write,
-};
+use std::io::{Error as IoError, ErrorKind as IoErrorKind, Read, Result as IoResult, Write};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Signature(pub KSignature);

@@ -1,7 +1,9 @@
 use btclib::crypto::PrivateKey;
 use btclib::network::Message;
 use btclib::sha256::Hash;
-use btclib::types::{Block, BlockHeader, Blockchain, Transaction, TransactionInput, TransactionOutput};
+use btclib::types::{
+    Block, BlockHeader, Blockchain, Transaction, TransactionInput, TransactionOutput,
+};
 use btclib::util::{MerkleRoot, Saveable};
 use chrono::Utc;
 
@@ -14,7 +16,11 @@ fn mined_coinbase_block(chain: &Blockchain, key: &PrivateKey, value: u64) -> Blo
         BlockHeader::new(
             Utc::now(),
             0,
-            chain.blocks().last().map(Block::hash).unwrap_or_else(Hash::zero),
+            chain
+                .blocks()
+                .last()
+                .map(Block::hash)
+                .unwrap_or_else(Hash::zero),
             MerkleRoot::calculate(&transactions),
             btclib::min_target(),
         ),
@@ -35,7 +41,10 @@ fn merkle_root_changes_when_transactions_change() {
     let key = PrivateKey::new_key();
     let tx1 = Transaction::coinbase(TransactionOutput::new(1, key.public_key()));
     let tx2 = Transaction::coinbase(TransactionOutput::new(2, key.public_key()));
-    assert_ne!(MerkleRoot::calculate(&[tx1.clone()]), MerkleRoot::calculate(&[tx1, tx2]));
+    assert_ne!(
+        MerkleRoot::calculate(&[tx1.clone()]),
+        MerkleRoot::calculate(&[tx1, tx2])
+    );
 }
 
 #[test]
@@ -63,7 +72,11 @@ fn blockchain_rejects_double_spend_in_block() {
     let recipient = PrivateKey::new_key();
     let mut chain = Blockchain::new();
     chain
-        .add_block(mined_coinbase_block(&chain, &sender, btclib::initial_reward_sats()))
+        .add_block(mined_coinbase_block(
+            &chain,
+            &sender,
+            btclib::initial_reward_sats(),
+        ))
         .unwrap();
     let prev_output = chain.utxos().values().next().unwrap().1.clone();
     let input = TransactionInput::signed(&prev_output, &sender);
