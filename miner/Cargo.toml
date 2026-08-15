@@ -8,5 +8,6 @@ license.workspace = true
 [dependencies]
 anyhow.workspace = true
 btclib = { path = "../lib" }
+chrono.workspace = true
 clap.workspace = true
 tokio.workspace = true
