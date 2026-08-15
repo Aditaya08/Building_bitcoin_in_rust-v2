@@ -122,7 +122,10 @@ impl Blockchain {
 
     pub fn try_adjust_target(&mut self) {
         if self.blocks.len() < DIFFICULTY_UPDATE_INTERVAL as usize
-            || self.blocks.len() % DIFFICULTY_UPDATE_INTERVAL as usize != 0
+            || !self
+                .blocks
+                .len()
+                .is_multiple_of(DIFFICULTY_UPDATE_INTERVAL as usize)
         {
             return;
         }

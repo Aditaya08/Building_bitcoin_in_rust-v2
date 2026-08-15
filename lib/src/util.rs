@@ -12,13 +12,13 @@ impl MerkleRoot {
         if transactions.is_empty() {
             return Self(Hash::zero());
         }
-        let mut layer: Vec<Hash> = transactions.iter().map(Hash::hash).collect();
+        let mut layer: Vec<Hash> = transactions.iter().map(Hash::digest).collect();
         while layer.len() > 1 {
-            let mut next = Vec::with_capacity((layer.len() + 1) / 2);
+            let mut next = Vec::with_capacity(layer.len().div_ceil(2));
             for pair in layer.chunks(2) {
                 let left = pair[0];
                 let right = *pair.get(1).unwrap_or(&left);
-                next.push(Hash::hash(&(left, right)));
+                next.push(Hash::digest(&(left, right)));
             }
             layer = next;
         }

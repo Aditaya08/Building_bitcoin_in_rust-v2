@@ -6,7 +6,7 @@ use std::fmt;
 pub struct Hash([u8; 32]);
 
 impl Hash {
-    pub fn hash<T: Serialize>(data: &T) -> Self {
+    pub fn digest<T: Serialize>(data: &T) -> Self {
         let mut serialized = Vec::new();
         ciborium::ser::into_writer(data, &mut serialized)
             .expect("serializing hash input should not fail");

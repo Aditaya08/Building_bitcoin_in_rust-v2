@@ -39,7 +39,7 @@ impl BlockHeader {
     }
 
     pub fn hash(&self) -> Hash {
-        Hash::hash(self)
+        Hash::digest(self)
     }
 
     pub fn mine(&mut self, max_rounds: u64) -> bool {

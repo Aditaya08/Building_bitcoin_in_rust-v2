@@ -33,7 +33,7 @@ impl TransactionOutput {
     }
 
     pub fn hash(&self) -> Hash {
-        Hash::hash(self)
+        Hash::digest(self)
     }
 }
 
@@ -60,7 +60,7 @@ impl Transaction {
     }
 
     pub fn hash(&self) -> Hash {
-        Hash::hash(self)
+        Hash::digest(self)
     }
 
     pub fn validate_basic(&self) -> Result<()> {

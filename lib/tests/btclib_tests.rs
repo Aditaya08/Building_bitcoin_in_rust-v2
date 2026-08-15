@@ -32,8 +32,8 @@ fn mined_coinbase_block(chain: &Blockchain, key: &PrivateKey, value: u64) -> Blo
 
 #[test]
 fn hash_is_deterministic() {
-    assert_eq!(Hash::hash(&"bitcoin"), Hash::hash(&"bitcoin"));
-    assert_ne!(Hash::hash(&"bitcoin"), Hash::hash(&"rust"));
+    assert_eq!(Hash::digest(&"bitcoin"), Hash::digest(&"bitcoin"));
+    assert_ne!(Hash::digest(&"bitcoin"), Hash::digest(&"rust"));
 }
 
 #[test]
@@ -42,7 +42,7 @@ fn merkle_root_changes_when_transactions_change() {
     let tx1 = Transaction::coinbase(TransactionOutput::new(1, key.public_key()));
     let tx2 = Transaction::coinbase(TransactionOutput::new(2, key.public_key()));
     assert_ne!(
-        MerkleRoot::calculate(&[tx1.clone()]),
+        MerkleRoot::calculate(std::slice::from_ref(&tx1)),
         MerkleRoot::calculate(&[tx1, tx2])
     );
 }
@@ -50,7 +50,7 @@ fn merkle_root_changes_when_transactions_change() {
 #[test]
 fn keys_sign_and_verify_hashes() {
     let key = PrivateKey::new_key();
-    let hash = Hash::hash(&"message");
+    let hash = Hash::digest(&"message");
     let signature = key.sign_hash(hash);
     assert!(key.public_key().verify_hash(hash, &signature));
 }
