@@ -12,3 +12,6 @@ btclib = { path = "../lib" }
 dashmap.workspace = true
 static_init.workspace = true
 tokio.workspace = true
+
+[dev-dependencies]
+chrono.workspace = true
