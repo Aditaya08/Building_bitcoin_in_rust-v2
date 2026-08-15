@@ -1,0 +1,14 @@
+[package]
+name = "node"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+argh.workspace = true
+btclib = { path = "../lib" }
+dashmap.workspace = true
+static_init.workspace = true
+tokio.workspace = true

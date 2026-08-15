@@ -1,0 +1,31 @@
+[workspace]
+resolver = "2"
+members = ["lib", "miner", "node", "wallet"]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+authors = ["Aditaya08"]
+license = "MIT"
+
+[workspace.dependencies]
+anyhow = "1.0"
+argh = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+ciborium = "0.2"
+clap = { version = "4.5", features = ["derive"] }
+crossbeam-skiplist = "0.1"
+dashmap = "6.1"
+hex = "0.4"
+k256 = { version = "0.13", features = ["ecdsa"] }
+rand_core = { version = "0.6", features = ["getrandom"] }
+serde = { version = "1.0", features = ["derive"] }
+sha2 = "0.10"
+static_init = "1.0"
+thiserror = "1.0"
+tokio = { version = "1.40", features = ["full"] }
+toml = "0.8"
+tracing = "0.1"
+tracing-appender = "0.2"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+uuid = { version = "1.10", features = ["v4", "serde"] }

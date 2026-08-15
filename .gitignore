@@ -1,0 +1,6 @@
+/target/
+**/*.cbor
+**/*.priv
+**/*.pub
+**/*.log
+wallet_config.toml
